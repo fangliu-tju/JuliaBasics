@@ -12,41 +12,41 @@ License: http://creativecommons.org/licenses/by/4.0/
 module Isinbisect
 
 """
-    makewordlist()
+    makewordarray()
 
-Reads lines from a file and builds a list using append.
+Reads lines from a file and builds an array using push!.
 """
-function makewordlist()
-    wordlist = []
+function makewordarray()
+    wordarray = []
     for line in eachline("./scr/CROSSWD.TXT")
         word = strip(line)
-        push!(wordlist, word)
+        push!(wordarray, word)
     end
-    return wordlist
+    return wordarray
 end
 
 """
-    isinbisect(wordlist, word)
+    isinbisect(wordarray, word)
 
-Checks whether a word is in a list using bisection search.
+Checks whether a word is in an array using bisection search.
 
-Precondition: the words in the list are sorted
+Precondition: the words in the array are sorted
 
 # Arguments
-- `wordlist`: list of strings.
+- `wordarray`: array of strings.
 - `word`: string.
-returns: true if the word is in the list; false otherwise
+returns: true if the word is in the array; false otherwise
 """
-function isinbisect(wordlist, word)
-    length(wordlist) == 0 && return false
-    i = length(wordlist) ÷ 2 + 1
-    wordlist[i] == word && return true
-    (wordlist[i] > word) ? (return isinbisect(wordlist[begin:i-1], word)) : (return isinbisect(wordlist[i+1:end], word))
+function isinbisect(wordarray, word)
+    length(wordarray) == 0 && return false
+    i = length(wordarray) ÷ 2 + 1
+    wordarray[i] == word && return true
+    (wordarray[i] > word) ? (return isinbisect(wordarray[begin:i-1], word)) : (return isinbisect(wordarray[i+1:end], word))
 end
 
-wordlist = makewordlist();
+wordarray = makewordarray();
 for word in ["aa", "alien", "allen", "zymurgy"]
-    println("$word in list ", isinbisect(wordlist, word))
+    println("$word in array ", isinbisect(wordarray, word))
 end
 
 end

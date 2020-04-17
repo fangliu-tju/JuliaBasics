@@ -12,49 +12,49 @@ License: http://creativecommons.org/licenses/by/4.0/
 module Interlock
 
 """
-    makewordlist()
+    makewordarray()
 
-Reads lines from a file and builds a list using append.
+Reads lines from a file and builds an array using push!.
 """
-function makewordlist()
-    wordlist = []
+function makewordarray()
+    wordarray = []
     for line in eachline("./scr/CROSSWD.TXT")
         word = strip(line)
-        push!(wordlist, word)
+        push!(wordarray, word)
     end
-    return wordlist
+    return wordarray
 end
 
 """
-    isinbisect(wordlist, word)
+    isinbisect(wordarray, word)
 
-Checks whether a word is in a list using bisection search.
+Checks whether a word is in an array using bisection search.
 
-Precondition: the words in the list are sorted
+Precondition: the words in the array are sorted
 
 # Arguments
-- `wordlist`: list of strings.
+- `wordarray`: array of strings.
 - `word`: string.
-returns: true if the word is in the list; false otherwise
+returns: true if the word is in the array; false otherwise
 """
-function isinbisect(wordlist, word)
-    length(wordlist) == 0 && return false
-    i = length(wordlist) ÷ 2 + 1
-    wordlist[i] == word && return true
-    (wordlist[i] > word) ? (return isinbisect(wordlist[begin:i-1], word)) : (return isinbisect(wordlist[i+1:end], word))
+function isinbisect(wordarray, word)
+    length(wordarray) == 0 && return false
+    i = length(wordarray) ÷ 2 + 1
+    wordarray[i] == word && return true
+    (wordarray[i] > word) ? (return isinbisect(wordarray[begin:i-1], word)) : (return isinbisect(wordarray[i+1:end], word))
 end
 
 """
-    isinterlock(wordlist, word)
+    isinterlock(wordarray, word)
 
-Checks whether a word appears in word_list as an interlock.
+Checks whether a word appears in wordarray as an interlock.
 
 # Arguments
-- `wordlist`: list of strings.
+- `wordarray`: list of strings.
 - `word`: string.
 """
-function isinterlock(wordlist, word)
-    return isinbisect(wordlist, word[begin:2:end]) && isinbisect(wordlist, word[begin+1:2:end])
+function isinterlock(wordarray, word)
+    return isinbisect(wordarray, word[begin:2:end]) && isinbisect(wordarray, word[begin+1:2:end])
 end
 
 """
@@ -62,20 +62,20 @@ end
 Return all interlock words.
 """
 function interlock()
-    wordlist = makewordlist()
-    for word in wordlist
-        isinterlock(wordlist, word) && println("$word = $(word[begin:2:end]) interlock $(word[begin+1:2:end])")
+    wordarray = makewordarray()
+    for word in wordarray
+        isinterlock(wordarray, word) && println("$word = $(word[begin:2:end]) interlock $(word[begin+1:2:end])")
     end
 end
 
-function istriinterlock(wordlist, word)
-    return isinbisect(wordlist, word[begin:3:end]) && isinbisect(wordlist, word[begin+1:3:end]) && isinbisect(wordlist, word[begin+2:3:end])
+function istriinterlock(wordarray, word)
+    return isinbisect(wordarray, word[begin:3:end]) && isinbisect(wordarray, word[begin+1:3:end]) && isinbisect(wordarray, word[begin+2:3:end])
 end
 
 function triinterlock()
-    wordlist = makewordlist()
-    for word in wordlist
-        istriinterlock(wordlist, word) && println("$word = $(word[begin:3:end]), $(word[begin+1:3:end]) and $(word[begin+2:3:end])")
+    wordarray = makewordarray()
+    for word in wordarray
+        istriinterlock(wordarray, word) && println("$word = $(word[begin:3:end]), $(word[begin+1:3:end]) and $(word[begin+2:3:end])")
     end
 end
 
