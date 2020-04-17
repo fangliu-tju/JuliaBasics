@@ -14,7 +14,7 @@ module Wordlist
 """
     makewordlist1()
 
-Reads lines from a file and builds a list using append.
+Reads lines from a file and builds a list using push!.
 """
 function makewordlist1()
     t = []
@@ -28,7 +28,7 @@ end
 """
     makewordlist2()
 
-Reads lines from a file and builds a list using append.
+Reads lines from a file and builds a list using array.
 """
 function makewordlist2()
     t = []
