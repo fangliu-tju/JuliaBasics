@@ -80,7 +80,8 @@ function processword!(suffixmap, prefix, word, order=2)
         prefix = (prefix..., word)
         return prefix
     end
-    suffixmap[prefix] = push!(get(suffixmap, prefix, []), word)
+    get!(suffixmap, prefix, [])
+    push!(suffixmap[prefix], word)
     prefix = shift(prefix, word)
     return prefix
 end
@@ -131,5 +132,55 @@ function shift(t, word)
     return (t[2:end]..., word)
 end
 
+## methods for Data Encapsulation in Chapter 18. 
+## Ignore them now and go back when learning section 18.11.
+
+struct Markov
+    order :: Int64
+    suffixmap :: Dict{Tuple{String, Vararg{String}}, Array{String, 1}}
+    prefix :: Array{String, 1}
+
+    function Markov(order::Int64=2)
+        new(order, Dict{Tuple{String, Vararg{String}}, Array{String, 1}}(), Array{String, 1}())
+    end
+end
+
+function processfile(filename, order::Float64)
+
+    markov = Markov(Int(order))
+    
+    fp = open(filename)
+  
+    skipgutenbergheader(fp)
+
+    for line in eachline(fp)
+        if startswith(line, "*** END OF THIS")
+            break
+        end
+
+        for word in split(rstrip(line))
+            processword!(markov, word)
+        end
+    end
+    close(fp)
+    return markov.suffixmap
+end
+
+function processword!(markov::Markov, word::AbstractString)
+    if length(markov.prefix) < markov.order
+        push!(markov.prefix, word)
+        return
+    end
+    get!(markov.suffixmap, (markov.prefix...,), Array{String, 1}())
+    push!(markov.suffixmap[(markov.prefix...,)], word)
+    popfirst!(markov.prefix)
+    push!(markov.prefix, word)
+end
+
+
+### main program
 suffixmap = processfile("./scr/emma.txt");
+randomtext(suffixmap)
+
+suffixmap = processfile("./scr/emma.txt",2.0);
 randomtext(suffixmap)
